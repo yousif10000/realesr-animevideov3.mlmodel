@@ -1,7 +1,7 @@
-name: Convert RealESRGAN AnimeVideoV3 to CoreML
+name: Convert ONNX RealESRGAN Anime to CoreML
 
 on:
-  workflow_dispatch:  # تشغيل يدوي
+  workflow_dispatch:
 
 jobs:
   convert:
@@ -18,17 +18,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install numpy==1.21.0
-          pip install torch==1.11.0 
-          pip install coremltools==5.0.0
-          pip install git+https://github.com/xinntao/BasicSR.git
-          
+          python -m pip install --upgrade pip
+          pip install coremltools==7.0 onnx
+
       - name: Convert to CoreML
         run: |
-          python convert_to_coreml.py
+          python convert_to_coreml.py models/RealESRGAN_x4plus_anime.onnx RealESRGAN_x4plus_anime.mlmodel
 
       - name: Upload CoreML model
         uses: actions/upload-artifact@v4
         with:
-          name: realesr-animevideov3-mlmodel
-          path: realesr-animevideov3.mlmodel
+          name: RealESRGAN_x4plus_anime-mlmodel
+          path: RealESRGAN_x4plus_anime.mlmodel
