@@ -18,10 +18,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install torch==2.2.2 torchvision
+          pip install numpy==1.26.4
+          pip install torch==2.0.0 torchvision==0.15.0
           pip install coremltools==7.0
           pip install git+https://github.com/xinntao/BasicSR.git
-
+          
       - name: Convert to CoreML
         run: |
           python convert_to_coreml.py
