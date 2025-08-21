@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install numpy==1.21.0
-          pip install torch==1.10.0 
+          pip install torch==1.11.0 
           pip install coremltools=5.0.0
           pip install git+https://github.com/xinntao/BasicSR.git
           
