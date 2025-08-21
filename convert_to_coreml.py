@@ -8,14 +8,14 @@ if len(sys.argv) < 3:
 onnx_model_path = sys.argv[1]
 mlmodel_path = sys.argv[2]
 
-# التحويل (بدون source="onnx")
-mlmodel = ct.converters.onnx.convert(
-    model=onnx_model_path,
+# التحويل (auto-detect source)
+mlmodel = ct.convert(
+    onnx_model_path,
     minimum_deployment_target=ct.target.iOS16,
     inputs=[
         ct.ImageType(
             name="input",
-            shape=(1, 3, ct.RangeDim(16, 4096), ct.RangeDim(16, 4096)),
+            shape=(1, 3, ct.RangeDim(16, 4096), ct.RangeDim(16, 4096)),  # dynamic H,W
             scale=1/255.0,
             bias=[0, 0, 0],
             color_layout="RGB"
