@@ -1,19 +1,28 @@
-import torch
+import sys
 import coremltools as ct
-import numpy as np
 
-# تحميل النموذج مباشرة
-model = torch.load("models/realesr-animevideov3.pth", map_location="cpu")
-model.eval()
+if len(sys.argv) < 3:
+    print("Usage: python convert_to_coreml.py <input.onnx> <output.mlmodel>")
+    sys.exit(1)
 
-# تحويل النموذج
-dummy_input = torch.randn(1, 3, 224, 224)
-traced_model = torch.jit.trace(model, dummy_input)
+onnx_model_path = sys.argv[1]
+mlmodel_path = sys.argv[2]
 
 mlmodel = ct.convert(
-    traced_model,
-    inputs=[ct.TensorType(shape=dummy_input.shape)],
-    minimum_deployment_target=ct.target.iOS16
+    onnx_model_path,
+    source="onnx",
+    minimum_deployment_target=ct.target.iOS16,
+    inputs=[
+        ct.ImageType(
+            name="input",
+            shape=(1, 3, ct.RangeDim(16, 4096), ct.RangeDim(16, 4096)),
+            scale=1/255.0,
+            bias=[0, 0, 0],
+            color_layout="RGB"
+        )
+    ],
+    outputs=[ct.ImageType(name="output")]
 )
 
-mlmodel.save("converted_model.mlmodel")
+mlmodel.save(mlmodel_path)
+print(f"✅ تم التحويل: {onnx_model_path} → {mlmodel_path}")
