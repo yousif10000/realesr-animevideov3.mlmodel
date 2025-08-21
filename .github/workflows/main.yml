@@ -1,0 +1,33 @@
+name: Convert RealESRGAN AnimeVideoV3 to CoreML
+
+on:
+  workflow_dispatch:  # تشغيل يدوي
+
+jobs:
+  convert:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install torch==2.2.2 torchvision
+          pip install coremltools==7.0
+          pip install git+https://github.com/xinntao/BasicSR.git
+
+      - name: Convert to CoreML
+        run: |
+          python convert_to_coreml.py
+
+      - name: Upload CoreML model
+        uses: actions/upload-artifact@v4
+        with:
+          name: realesr-animevideov3-mlmodel
+          path: realesr-animevideov3.mlmodel
