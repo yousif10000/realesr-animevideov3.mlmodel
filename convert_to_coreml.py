@@ -8,9 +8,9 @@ if len(sys.argv) < 3:
 onnx_model_path = sys.argv[1]
 mlmodel_path = sys.argv[2]
 
-mlmodel = ct.convert(
-    onnx_model_path,
-    source="onnx",
+# التحويل (بدون source="onnx")
+mlmodel = ct.converters.onnx.convert(
+    model=onnx_model_path,
     minimum_deployment_target=ct.target.iOS16,
     inputs=[
         ct.ImageType(
