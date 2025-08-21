@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install coremltools==7.0 onnx
+          pip install coremltools==3.2 onnx
 
       - name: Convert to CoreML
         run: |
